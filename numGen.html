@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+
+	
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		.main {
+			margin: 0 auto;
+			width: 600px;
+			margin-top: 100px;
+		}
+		
+		div{
+			margin: 20px 0;
+		}
+
+		#result {
+			width: 370px;
+		}
+
+
+	</style>
+
+</head>
+
+
+<body>
+
+	<div class="main">
+		
+		<div>
+			<input type="text" placeholder="开始编号" id='start'> -
+			<input type="text" id='end' placeholder="结束编号">
+			<button id='btn'>生成</button>
+		</div>
+			<textarea name="" id="result" cols="30" rows="10"></textarea>	
+		</div>
+
+
+	</div>
+	
+	
+
+
+</body>
+
+
+<script>
+	
+
+	function numGen(start, end, width, prefix) {
+		var nums = []
+		for (var i = start; i<=end; i++) {
+			var str = String(i)
+			str = str.padStart(width, '0')
+			str = prefix + str
+
+			nums.push(str)
+		}
+		return nums.join(',')
+	}
+
+	$('#btn').on('click', function() {
+		var start = $('#start').val()
+		var end = $('#end').val()
+
+		var result = numGen(start, end, 9, 'HG')
+
+		$('#result').val(result)
+
+	})
+
+
+</script>
+</html>

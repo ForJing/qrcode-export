@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+	<script src="./jquery.qrcode.js"></script>
 
-	
+
 	<style>
 		* {
 			margin: 0;
@@ -27,6 +29,10 @@
 		}
 
 
+		#qrcode	{
+			display: none;
+		}
+
 	</style>
 
 </head>
@@ -35,30 +41,44 @@
 <body>
 
 	<div class="main">
-		
+
 		<div>
 			<input type="text" placeholder="开始编号" id='start'> -
 			<input type="text" id='end' placeholder="结束编号">
 			<button id='btn'>生成</button>
 		</div>
-			<textarea name="" id="result" cols="30" rows="10"></textarea>	
-		</div>
+
+		<div id="qrcode"></div>
+
+		<textarea name="" id="result" cols="30" rows="10"></textarea>
+
+
+		<textarea name="" placeholder="token" id="token" cols="30" rows="10"></textarea>
+		<button id="btn-code">生成二维码链接</button>
+
+		<div>下面是二维码链接</div>
+		<textarea name="" placeholder="二维码链接" id="qr-list" cols="30" rows="10"></textarea>
+
+	</div>
+
+
+
 
 
 	</div>
-	
-	
+
+
 
 
 </body>
 
 
 <script>
-	
+
 
 	function numGen(start, end, width, prefix) {
 		var nums = []
-		for (var i = start; i<=end; i++) {
+		for (var i = start; i <= end; i++) {
 			var str = String(i)
 			str = str.padStart(width, '0')
 			str = prefix + str
@@ -68,7 +88,7 @@
 		return nums.join(',')
 	}
 
-	$('#btn').on('click', function() {
+	$('#btn').on('click', function () {
 		var start = $('#start').val()
 		var end = $('#end').val()
 
@@ -79,5 +99,71 @@
 	})
 
 
+
+
+	async function __downloadImageByVmCode(vmCode, token) {
+		const res = await fetch(
+			`https://distributorapi.hgobox.com/vms/${vmCode}/qrcode/v1`,
+			{
+				headers: {
+					"Auth-Token": token
+				}
+			}
+		).then(r => r.json());
+
+		const url = res.data.url;
+
+		// $("#qrcode").qrcode(url);
+		return url
+
+		// var codeCanvas = $("#qrcode").find("canvas")[0];
+
+		// saveCanvasAsImage(codeCanvas, vmCode + ".jpg");
+	}
+
+	function saveCanvasAsImage(canvas, filename) {
+		canvas.toBlob(
+			function (blob) {
+				var link = document.createElement("a");
+
+				var objurl = URL.createObjectURL(blob);
+				link.download = filename;
+
+				link.href = objurl;
+
+				link.click();
+			},
+			"image/jpeg",
+			1
+		);
+	}
+
+	// 点击生成二维码
+	$("#btn-code").on("click", async function () {
+		const codeList = $("#result")
+			.val()
+			.split(",");
+
+		const token = $("#token").val();
+
+		let str = ''
+
+		codeList.forEach(async item => {
+			console.log('item', item)
+			var url = await __downloadImageByVmCode(item, token);
+			str = str + url + ','
+			$('#qr-list').val(str)
+		});
+
+
+	});
+
+
+
+
+
+
+
 </script>
+
 </html>

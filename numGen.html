@@ -146,14 +146,23 @@
 
 		const token = $("#token").val();
 
-		let str = ''
 
+
+		let obj = {}
+
+
+		var count = 0
 		codeList.forEach(async item => {
 			console.log('item', item)
 			var url = await __downloadImageByVmCode(item, token);
-			str = str + url + ','
-			$('#qr-list').val(str)
+			obj[item] = url
+			count++
+			if (count == codeList.length) {
+				console.log('obj', obj)
+				$('#qr-list').val(JSON.stringify(obj))
+			}
 		});
+
 
 
 	});

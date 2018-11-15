@@ -48,6 +48,12 @@
 			<button id='btn'>生成</button>
 		</div>
 
+		<div>
+			<div>不规则编号， 逗号隔开</div>
+			<textarea name="" id="#irregular" cols="30" rows="10"></textarea>
+			<button id='btn2'>生成</button>
+		</div>
+
 		<div id="qrcode"></div>
 
 		<textarea name="" id="result" cols="30" rows="10"></textarea>
@@ -60,22 +66,11 @@
 		<textarea name="" placeholder="二维码链接" id="qr-list" cols="30" rows="10"></textarea>
 
 	</div>
-
-
-
-
-
 	</div>
-
-
-
-
 </body>
-
-
 <script>
 
-
+	// 开始到结尾
 	function numGen(start, end, width, prefix) {
 		var nums = []
 		for (var i = start; i <= end; i++) {
@@ -97,6 +92,10 @@
 		$('#result').val(result)
 
 	})
+	// ```````````````````
+
+
+	// 不规则````````````````````````````````
 
 
 

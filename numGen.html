@@ -5,8 +5,6 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-	<script src="./jquery.qrcode.js"></script>
-
 
 	<style>
 		* {
@@ -50,7 +48,7 @@
 
 		<div>
 			<div>不规则编号， 逗号隔开</div>
-			<textarea name="" id="#irregular" cols="30" rows="10"></textarea>
+			<textarea name="" id="irregular" cols="30" rows="10"></textarea>
 			<button id='btn2'>生成</button>
 		</div>
 
@@ -96,8 +94,12 @@
 
 
 	// 不规则````````````````````````````````
+	$('#btn2').on('click', function() {
+		const txt = $('#irregular').val()
+		const codeList = txt.trim().split(/[,\s]+/)
+		$('#result').val(codeList.join(','))
 
-
+	})
 
 
 	async function __downloadImageByVmCode(vmCode, token) {
@@ -112,47 +114,18 @@
 
 		const url = res.data.url;
 
-		// $("#qrcode").qrcode(url);
 		return url
-
-		// var codeCanvas = $("#qrcode").find("canvas")[0];
-
-		// saveCanvasAsImage(codeCanvas, vmCode + ".jpg");
 	}
 
-	function saveCanvasAsImage(canvas, filename) {
-		canvas.toBlob(
-			function (blob) {
-				var link = document.createElement("a");
-
-				var objurl = URL.createObjectURL(blob);
-				link.download = filename;
-
-				link.href = objurl;
-
-				link.click();
-			},
-			"image/jpeg",
-			1
-		);
-	}
-
-	// 点击生成二维码
 	$("#btn-code").on("click", async function () {
 		const codeList = $("#result")
 			.val()
 			.split(",");
 
 		const token = $("#token").val();
-
-
-
 		let obj = {}
-
-
 		var count = 0
 		codeList.forEach(async item => {
-			console.log('item', item)
 			var url = await __downloadImageByVmCode(item, token);
 			obj[item] = url
 			count++
@@ -161,9 +134,6 @@
 				$('#qr-list').val(JSON.stringify(obj))
 			}
 		});
-
-
-
 	});
 
 
